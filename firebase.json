@@ -1,0 +1,19 @@
+{
+  "hosting": [
+    {
+      "target": "lamadinner",
+      "public": "dist/lamadinner",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    }
+  ]
+}
