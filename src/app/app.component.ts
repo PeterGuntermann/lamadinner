@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFireAuth } from "@angular/fire/auth";
-import { AngularFireDatabase } from "@angular/fire/database";
+import { AuthService } from "./auth/auth.service";
+import { DatabaseKeys } from "./database/database-keys";
+import { DatabaseService } from "./database/database.service";
 
 // Best sources:
 // https://www.npmjs.com/package/@angular/fire
@@ -13,31 +14,40 @@ import { AngularFireDatabase } from "@angular/fire/database";
 })
 export class AppComponent implements OnInit {
   games: any[];
+  playerName: string;
 
-  constructor(public db: AngularFireDatabase, public auth: AngularFireAuth) {
+  constructor(public authService: AuthService, public databaseService: DatabaseService) {
   }
 
   ngOnInit(): void {
-    this.db.list("lamagames").valueChanges().subscribe(value => {
+    this.databaseService.valueChangesObservable(DatabaseKeys.Lamagames).subscribe(value => {
       this.games = value;
     })
 
-    this.auth.user.subscribe(user => {
+    this.authService.authState.subscribe(value => {
+      console.log("authState: ", value);
+    })
+
+    this.authService.user.subscribe(user => {
       if (user) {
         console.log("uid: " + user.uid);
         console.log("isAnonymous: " + user.isAnonymous);
         console.log("displayName: " + user.displayName);
-        console.log(user);
+        console.log("user: ", user);
       }
     });
   }
 
   async login() {
-    await this.auth.auth.signInAnonymously()
+    await this.authService.loginAsNewPlayer(this.playerName);
   }
 
   async logout() {
-    await this.auth.auth.signOut();
+    this.resetPlayerName();
+    await this.authService.logout();
   }
 
+  private resetPlayerName() {
+    this.playerName = "";
+  }
 }

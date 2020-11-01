@@ -3,6 +3,7 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from "@angular/fire/auth";
 import { AngularFireDatabaseModule } from "@angular/fire/database";
 import { AngularFirestoreModule } from "@angular/fire/firestore";
+import { FormsModule } from "@angular/forms";
 import { BrowserModule } from '@angular/platform-browser';
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
@@ -13,7 +14,8 @@ import { AppComponent } from './app.component';
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireDatabaseModule,
     AngularFireAuthModule,
-    AngularFirestoreModule
+    AngularFirestoreModule,
+    FormsModule
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent]
