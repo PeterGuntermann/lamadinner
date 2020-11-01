@@ -1,4 +1,24 @@
 <h1>lamadinner</h1>
-<ul>
-  <li *ngFor="let game of games">{{game}}</li>
-</ul>
+
+<section class="db">
+  <ul>
+    <li *ngFor="let game of games">{{game}}</li>
+  </ul>
+</section>
+
+<section class="auth">
+  <div *ngIf="auth.user | async as user; else showLogin">
+    <h1>Hello there!</h1>
+    <pre>
+      uid: {{ user.uid }}
+      displayName: {{ user.displayName }}
+      isAnonymous: {{ user.isAnonymous }}
+    </pre>
+    <button (click)="logout()">Logout</button>
+  </div>
+
+  <ng-template #showLogin>
+    <p>Please login.</p>
+    <button (click)="login()">Login</button>
+  </ng-template>
+</section>

@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { AngularFireAuth } from "@angular/fire/auth";
 import { AngularFireDatabase } from "@angular/fire/database";
 
 // Best sources:
@@ -10,13 +11,33 @@ import { AngularFireDatabase } from "@angular/fire/database";
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   games: any[];
 
-  constructor(db: AngularFireDatabase) {
-    db.list("lamagames").valueChanges().subscribe(value => {
+  constructor(public db: AngularFireDatabase, public auth: AngularFireAuth) {
+  }
+
+  ngOnInit(): void {
+    this.db.list("lamagames").valueChanges().subscribe(value => {
       this.games = value;
     })
 
+    this.auth.user.subscribe(user => {
+      if (user) {
+        console.log("uid: " + user.uid);
+        console.log("isAnonymous: " + user.isAnonymous);
+        console.log("displayName: " + user.displayName);
+        console.log(user);
+      }
+    });
   }
+
+  async login() {
+    await this.auth.auth.signInAnonymously()
+  }
+
+  async logout() {
+    await this.auth.auth.signOut();
+  }
+
 }
